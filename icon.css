@@ -1,0 +1,75 @@
+@font-face {
+  font-family: 'icomoon';
+  src:  url('fonts/icomoon.eot?y041ef');
+  src:  url('fonts/icomoon.eot?y041ef#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?y041ef') format('truetype'),
+    url('fonts/icomoon.woff?y041ef') format('woff'),
+    url('fonts/icomoon.svg?y041ef#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-Pizza:before {
+  content: "\e900";
+  color: #ffc107;
+}
+.icon-Vtoroe:before {
+  content: "\e901";
+  color: #ffc107;
+}
+.icon-Garnir:before {
+  content: "\e902";
+  color: #ffc107;
+}
+.icon-Supy:before {
+  content: "\e903";
+  color: #ffc107;
+}
+.icon-Syrniki:before {
+  content: "\e904";
+  color: #ffc107;
+}
+.icon-Omlet:before {
+  content: "\e905";
+  color: #ffc107;
+}
+.icon-Bliny:before {
+  content: "\e906";
+  color: #ffc107;
+}
+.icon-Salad:before {
+  content: "\e907";
+  color: #ffc107;
+}
+.icon-Sous:before {
+  content: "\e908";
+  color: #ffc107;
+}
+.icon-jam:before {
+  content: "\e909";
+  color: #ffc107;
+}
+.icon-Zapekanka:before {
+  content: "\e90a";
+  color: #ffc107;
+}
+.icon-Kashi:before {
+  content: "\e90b";
+  color: #ffc107;
+}

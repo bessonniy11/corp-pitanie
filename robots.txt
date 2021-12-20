@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /img/
+Disallow: /js/
+Disallow: /css/
+Disallow: /*?*
+Disallow: /*%
+Disallow: /index.php
+Disallow: /index.html
+Disallow: /*?page=
+Disallow: /*&page=
+Sitemap: https://catering.tyteda.ru/sitemap.xml

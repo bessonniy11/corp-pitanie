@@ -1,0 +1,137 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --main: #F2B058;
+    --second: #11d028;
+}
+
+body {
+    color: #181725;
+    font-family: 'Monserat', sans-serif;
+    font-size: 16px;
+    line-height: 1.1;
+    padding-bottom: 50px;
+}
+/* h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-weight: inherit;
+	font-size: inherit;
+} */
+a {
+    color: #181725;
+    text-decoration: none;
+    transition: .3s ease-in-out;
+}
+
+ul {
+    list-style: none;
+}
+
+img {
+    max-width: 100%;
+}
+.menu-1,
+.menu-2,
+.menu-3,
+.menu-4 {
+    padding: 0 15px;
+}
+/* .menu-1,
+.menu-2,
+.menu-3,
+.menu-4 {
+    display: none;
+} */
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 25px 20px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+}
+.container:nth-child(even) {
+    background-color: rgba(223, 223, 223, .5);
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
+}
+.container:nth-child(odd ) {
+    background-color: rgba(223, 223, 223, .2);
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
+}
+.mail-title {
+    text-align: center;
+    font-size: 28px;
+    margin: 40px auto;
+}
+
+.menu-items {
+    /* display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap; */
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    
+}
+.menu-item {
+    background-color: #fff;
+    padding: 0 8px 15px;
+    max-width: 250px;
+    border-radius: 20px;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.4);
+    /* margin: 20px; */
+}
+.menu-item__title {
+    text-align: center;
+    font-size: 22px;
+    margin: 50px auto 20px;
+    padding: 0 10px;
+    
+}
+.menu-item__body {
+}
+.menu-body {
+}
+.menu-body__img img {
+    display: block;
+    margin: 10px auto;
+    cursor: pointer;
+    transition: transform 0.3s ease 0s;
+}
+.menu-body__img img:hover {
+    transform: scale(1.1);
+}
+.menu-body__name {
+    text-align: center;
+    font-size: 18px;
+    margin: 10px auto;
+    min-height: 40px;
+}
+.menu-body__desc {
+    text-align: center;
+    font-size: 18px;
+    margin: 10px auto;
+}
+.price-and-ves {
+    display: flex;
+    justify-content: space-between;
+}
+
+.menu-body__price {
+    text-align: center;
+    font-size: 18px;
+    margin: 10px auto;
+}
+.menu-body__ves {
+    text-align: center;
+    font-size: 18px;
+    margin: 10px auto;
+}
