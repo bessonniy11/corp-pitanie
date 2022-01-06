@@ -3,8 +3,6 @@ require_once __DIR__ . "/database/database.php";
 require_once __DIR__ . "/functions/token.php";
 
 
-
-
 // echo $_COOKIE["token"];
 if (isset($_POST['logout_submit'])) {
     setcookie("token", NULL);
@@ -22,10 +20,20 @@ if (isset($_COOKIE["token"])) {
     header("Location: /profile.php");
 }
 
+if (isset($_POST['del_worker_btn'])) {
+    $del_worker = $_POST['del_worker'];
+    $del_id = $_POST['del_worker_id'];
+
+    // echo $del_company;
+
+    $query2 = "DELETE FROM `workers` WHERE `worker_id` = '$del_id'";
+    $dbh->exec($query2);
+}
 
 if (isset($_POST['worker_reg'])) {
     $worker_name = $_POST['worker_name'];
     $worker_login = $_POST['worker_login'];
+    $worker_phone = $_POST['worker_phone'];
     $worker_company = $_POST['worker_company'];
     $worker_password = $_POST['worker_password'];
     $worker_pass_confirm = $_POST['worker_pass_confirm'];
@@ -40,14 +48,15 @@ if (isset($_POST['worker_reg'])) {
     }
 
     if (empty($errors)) {
-        $sql = "INSERT INTO `workers`(`worker_login`, `worker_name`,`worker_company`, `worker_password`) VALUES (:worker_login, :worker_name, :worker_company, :worker_password)";
+        $sql = "INSERT INTO `workers`(`worker_login`, `worker_name`,`worker_company`, `worker_password`, `worker_phone`) VALUES (:worker_login, :worker_name, :worker_company, :worker_password, :worker_phone)";
         $params = [
             "worker_login" => $worker_login,
             "worker_name" => $worker_name,
             "worker_company" => $worker_company,
+            "worker_phone" => $worker_phone,
             "worker_password" => password_hash($worker_password, PASSWORD_DEFAULT)
         ];
-
+        var_dump($params);
         $dbh->prepare($sql)->execute($params);
         header("Location: /company-profile.php");
     }
@@ -55,15 +64,13 @@ if (isset($_POST['worker_reg'])) {
 
 $adminCompany = $user['admin_company'];
 $sql = "SELECT * FROM `companies` WHERE `name` = :admincompany";
+// echo $adminCompany;
 $params = [
     "admincompany" => $adminCompany
 ];
 $fetchCompany = $dbh->prepare($sql);
 $fetchCompany->execute($params);
 $companyImg = $fetchCompany->fetch(PDO::FETCH_ASSOC);
-
-
-
 
 ?>
 
@@ -139,7 +146,7 @@ $companyImg = $fetchCompany->fetch(PDO::FETCH_ASSOC);
                                     <div class="item-btn__status">
                                         <img src="img/status-ok.svg" alt="">
                                     </div>
-                                    <a href="#delworker" class="item-btn__del popup-link">
+                                    <a href="<?php echo $row['worker_id'] ?>" class="item-btn__del popup-link">
                                         <img src="img/worker-del.svg" alt="">
                                     </a>
                                 </div>
@@ -147,7 +154,6 @@ $companyImg = $fetchCompany->fetch(PDO::FETCH_ASSOC);
                         <?php } ?>
                     </ul>
                 </div>
-
             </div>
             <div class="_tabs-block ">
                 <div class="container">
@@ -155,28 +161,28 @@ $companyImg = $fetchCompany->fetch(PDO::FETCH_ASSOC);
                         <div class="company-menu__tarifs tarif">
                             <div class="tarif-item tarif-you">Ваш тариф:</div>
                             <div class="tarifs__control">
-                                <div class="tarif-item tarif-selected">
-                                    СТАНДАРТ
+                                <div class="tarif-item tarif-selected" id="tarif-selected">
+                                    Мини (от 200р)
                                 </div>
                                 <div class="tarif-item tarif-changed">
                                     <div class="tarif-changed__link">ИЗМЕНИТЬ ТАРИФ</div>
                                     <div class="tarif-changed__body tarif-changed">
                                         <ul class="tarif-changed__list">
                                             <li class="tarif-changed__item">
-                                                <a href="" class="tarif-changed__link">Мини (от 200р)</a>
+                                                <div href="" class="tarif-changed__link">Мини (от 200р)</div>
                                             </li>
                                             <li class="tarif-changed__item">
-                                                <a href="" class="tarif-changed__link">Стандарт (от 250р)</a>
+                                                <div href="" class="tarif-changed__link">Стандарт (от 250р)</div>
                                             </li>
                                             <li class="tarif-changed__item">
-                                                <a href="" class="tarif-changed__link">Комфорт (от 350р)</a>
+                                                <div href="" class="tarif-changed__link">Комфорт (от 350р)</div>
                                             </li>
                                         </ul>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="company-menu__body menu-body _menu _menutab">
+                        <div class="company-menu__body menu-body _menu _menutab tarif-1">
                             <div class="menu-body__contol control-menu">
                                 <div class="control-menu__btns">
                                     <div class="control-menu__btn _tabs-items">ЗАВТРАК</div>
@@ -202,28 +208,136 @@ $companyImg = $fetchCompany->fetch(PDO::FETCH_ASSOC);
                                         <img src="img/Borsh.png" alt="">
                                     </div>
                                     <div class="body-item__name">СУПЫ</div>
-                                    <a href="#soups_popup" class="body-item__btn popup-link">РЕДАКТИРОВАТЬ</a>
+                                    <a href="#soups_popup" class="body-item__btn popup-link">СМОТРЕТЬ</a>
                                 </div>
                                 <div class="menu-body__item body-item">
                                     <div class="body-item__img">
                                         <img src="img/KartofelPoDerevenski.png" alt="">
                                     </div>
                                     <div class="body-item__name">ГАРНИРЫ</div>
-                                    <a href="#garniry_popup" class="body-item__btn popup-link">РЕДАКТИРОВАТЬ</a>
+                                    <a href="#garniry_popup" class="body-item__btn popup-link">СМОТРЕТЬ</a>
                                 </div>
                                 <div class="menu-body__item body-item">
                                     <div class="body-item__img">
                                         <img src="img/KryloZhar.png" alt="">
                                     </div>
                                     <div class="body-item__name">ГОРЯЧЕЕ</div>
-                                    <a href="#goryachee_popup" class="body-item__btn popup-link">РЕДАКТИРОВАТЬ</a>
+                                    <a href="#goryachee_popup" class="body-item__btn popup-link">СМОТРЕТЬ</a>
                                 </div>
                                 <div class="menu-body__item body-item">
                                     <div class="body-item__img">
                                         <img src="img/Seldpodshuboy.png" alt="">
                                     </div>
                                     <div class="body-item__name">САЛАТЫ</div>
-                                    <a href="#salats_popup" class="body-item__btn popup-link">РЕДАКТИРОВАТЬ</a>
+                                    <a href="#salats_popup" class="body-item__btn popup-link">СМОТРЕТЬ</a>
+                                </div>
+                            </div>
+                            <div class="menu-body__items _tabs-blocks">
+                                3
+                            </div>
+                        </div>
+                        <div class="company-menu__body menu-body _menu _menutab tarif-2">
+                            <div class="menu-body__contol control-menu">
+                                <div class="control-menu__btns">
+                                    <div class="control-menu__btn _tabs-items">ЗАВТРАК</div>
+                                    <div class="control-menu__btn _tabs-items _active">ОБЕД</div>
+                                    <div class="control-menu__btn _tabs-items">УЖИН</div>
+                                </div>
+                                <div class="control-menu__desc desc-control">
+                                    <div class="desc-control__name">ОБЕД:</div>
+                                    <ul class="desc-control__list">
+                                        <li class="desc-control__item">СУПЫ: 350мл</li>
+                                        <li class="desc-control__item">ГАРНИРЫ: 180гр</li>
+                                        <li class="desc-control__item">ГОРЯЧЕЕ: 100гр</li>
+                                        <li class="desc-control__item">САЛАТЫ: 130гр</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="menu-body__items _tabs-blocks">
+                                1
+                            </div>
+                            <div class="menu-body__items _tabs-blocks _active">
+                                <div class="menu-body__item body-item">
+                                    <div class="body-item__img">
+                                        <img src="img/Borsh.png" alt="">
+                                    </div>
+                                    <div class="body-item__name">СУПЫ</div>
+                                    <a href="#soups_popup" class="body-item__btn popup-link">СМОТРЕТЬ</a>
+                                </div>
+                                <div class="menu-body__item body-item">
+                                    <div class="body-item__img">
+                                        <img src="img/KartofelPoDerevenski.png" alt="">
+                                    </div>
+                                    <div class="body-item__name">ГАРНИРЫ</div>
+                                    <a href="#garniry_popup" class="body-item__btn popup-link">СМОТРЕТЬ</a>
+                                </div>
+                                <div class="menu-body__item body-item">
+                                    <div class="body-item__img">
+                                        <img src="img/KryloZhar.png" alt="">
+                                    </div>
+                                    <div class="body-item__name">ГОРЯЧЕЕ</div>
+                                    <a href="#goryachee_popup" class="body-item__btn popup-link">СМОТРЕТЬ</a>
+                                </div>
+                                <div class="menu-body__item body-item">
+                                    <div class="body-item__img">
+                                        <img src="img/Seldpodshuboy.png" alt="">
+                                    </div>
+                                    <div class="body-item__name">САЛАТЫ</div>
+                                    <a href="#salats_popup" class="body-item__btn popup-link">СМОТРЕТЬ</a>
+                                </div>
+                            </div>
+                            <div class="menu-body__items _tabs-blocks">
+                                3
+                            </div>
+                        </div>
+                        <div class="company-menu__body menu-body _menu _menutab tarif-3">
+                            <div class="menu-body__contol control-menu">
+                                <div class="control-menu__btns">
+                                    <div class="control-menu__btn _tabs-items">ЗАВТРАК</div>
+                                    <div class="control-menu__btn _tabs-items _active">ОБЕД</div>
+                                    <div class="control-menu__btn _tabs-items">УЖИН</div>
+                                </div>
+                                <div class="control-menu__desc desc-control">
+                                    <div class="desc-control__name">ОБЕД:</div>
+                                    <ul class="desc-control__list">
+                                        <li class="desc-control__item">СУПЫ: 350мл</li>
+                                        <li class="desc-control__item">ГАРНИРЫ: 180гр</li>
+                                        <li class="desc-control__item">ГОРЯЧЕЕ: 100гр</li>
+                                        <li class="desc-control__item">САЛАТЫ: 130гр</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="menu-body__items _tabs-blocks">
+                                1
+                            </div>
+                            <div class="menu-body__items _tabs-blocks _active">
+                                <div class="menu-body__item body-item">
+                                    <div class="body-item__img">
+                                        <img src="img/Borsh.png" alt="">
+                                    </div>
+                                    <div class="body-item__name">СУПЫ</div>
+                                    <a href="#soups_popup" class="body-item__btn popup-link">СМОТРЕТЬ</a>
+                                </div>
+                                <div class="menu-body__item body-item">
+                                    <div class="body-item__img">
+                                        <img src="img/KartofelPoDerevenski.png" alt="">
+                                    </div>
+                                    <div class="body-item__name">ГАРНИРЫ</div>
+                                    <a href="#garniry_popup" class="body-item__btn popup-link">СМОТРЕТЬ</a>
+                                </div>
+                                <div class="menu-body__item body-item">
+                                    <div class="body-item__img">
+                                        <img src="img/KryloZhar.png" alt="">
+                                    </div>
+                                    <div class="body-item__name">ГОРЯЧЕЕ</div>
+                                    <a href="#goryachee_popup" class="body-item__btn popup-link">СМОТРЕТЬ</a>
+                                </div>
+                                <div class="menu-body__item body-item">
+                                    <div class="body-item__img">
+                                        <img src="img/Seldpodshuboy.png" alt="">
+                                    </div>
+                                    <div class="body-item__name">САЛАТЫ</div>
+                                    <a href="#salats_popup" class="body-item__btn popup-link">СМОТРЕТЬ</a>
                                 </div>
                             </div>
                             <div class="menu-body__items _tabs-blocks">
@@ -350,7 +464,8 @@ $companyImg = $fetchCompany->fetch(PDO::FETCH_ASSOC);
                             </div>
                             <input readonly class="popup__content-company" name="worker_company" value="<?= $companyImg['name'] ?>">
                             <input type="text" name="worker_name" placeholder="Введите ФИО" />
-                            <input type=" text" name="worker_login" placeholder="Введите Логин" />
+                            <input type="text" name="worker_login" placeholder="Введите Логин" />
+                            <input type="tel" name="worker_phone" placeholder="Телефон сотрудника" data-validate-field="tel" />
                             <input type="password" name="worker_password" placeholder="Пароль" />
                             <input type="password" name="worker_pass_confirm" placeholder="Подтвердить" />
                             <button type="submit" name="worker_reg" class="register-form__btn btn">Добавить</button>
@@ -360,7 +475,33 @@ $companyImg = $fetchCompany->fetch(PDO::FETCH_ASSOC);
                 </div>
             </div>
         </div>
-        <div id="delworker" class="popup popup_del">
+        <?php
+        $sql = "SELECT * FROM `workers`";
+        $rows = $dbh->query($sql);
+        foreach ($rows as $row) {
+        ?>
+            <div id="<?php echo $row['worker_id'] ?>" class="popup popup_add">
+                <form class="popup__body" action="company-profile.php" method="POST">
+                    <div class="popup__content delete-style">
+                        <div class="popup__close _icon-close"></div>
+                        <div class="popup-delete__title ">
+                            Вы уверены, что хотите удалить <?php echo $row['worker_name'] ?>?
+                        </div>
+                        <input hidden type="text" name="del_worker" value="<?php echo $row['worker_name'] ?>">
+                        <input hidden type="text" name="del_worker_id" value="<?php echo $row['worker_id'] ?>">
+                        <div class="popup-delete__btns">
+                            <button class="popup-delete__btn" type="submit" name="del_worker_btn">
+                                Да, конечно!
+                            </button>
+                            <a class="popup-delete__btn popup-delete__btn-no close-popup">
+                                Не удалять!
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        <?php } ?>
+        <!-- <div id="delworker" class="popup popup_del">
             <div class="popup__body ">
                 <div class="popup__content delete-style">
                     <div class="popup__close _icon-close"></div>
@@ -377,7 +518,7 @@ $companyImg = $fetchCompany->fetch(PDO::FETCH_ASSOC);
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
         <div id="soups_popup" class="popup">
             <div class="popup__body ">
                 <div class="popup__content change_popup">
@@ -392,7 +533,7 @@ $companyImg = $fetchCompany->fetch(PDO::FETCH_ASSOC);
                                 В меню
                             </div>
                         </div>
-                        <div class="change_popup__item hidden">
+                        <div class="change_popup__item">
                             <img src="img/Borsh.png" alt="">
                             <div class="change_popup__status">
                                 В меню
@@ -440,6 +581,9 @@ $companyImg = $fetchCompany->fetch(PDO::FETCH_ASSOC);
             </div>
         </div>
     </div>
+    <script src="js/just-validate.min.js"></script>
+    <script src="js/inputmask.min.js"></script>
+    <script src="js/common.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     <script src="script.js"></script>

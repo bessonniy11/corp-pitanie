@@ -1,6 +1,46 @@
 <?php
 require_once __DIR__ . "/database/database.php";
 
+$item1 = $_POST['item1'];
+$item2 = $_POST['item2'];
+$item3 = $_POST['item3'];
+$item4 = $_POST['item4'];
+$worker_name = $_POST['worker_name'];
+$worker_company = $_POST['worker_company'];
+$datefororder = $_POST['datefororder'];
+
+$errors = [];
+
+if (empty($item1)) {
+    $errors['item1'] = true;
+}
+if (empty($item2)) {
+    $errors['item2'] = true;
+}
+if (empty($item3)) {
+    $errors['item3'] = true;
+}
+
+
+if (empty($errors)) {
+    $sql = "INSERT INTO `orders`(`order_dish1`, `order_dish2`, `order_dish3`, `order_date`, `order_name_worker`, `order_company`, `order_for_date`) VALUES (:order1, :order2, :order3, :order_date, :order_name_worker, :worker_company, :datefororder)";
+    $params = [
+        "order1" => $item1,
+        "order2" => $item2,
+        "order3" => $item3,
+        "order_date" => $item4,
+        "order_name_worker" => $worker_name,
+        "datefororder" => $datefororder,
+        "worker_company" => $worker_company
+    ];
+
+    $dbh->prepare($sql)->execute($params);
+    // header("Location: /lk-worker.php");
+    // echo "<meta http-equiv=\"refresh\" content=\"0;URL=admin.php\">";
+    // header("Refresh:1;");
+    // echo $datefororder;
+}
+
 
 if (isset($_POST['reg_admin_submit'])) {
     $admin_name = $_POST['admin_name'];
@@ -35,20 +75,21 @@ if (isset($_POST['del_company_btn'])) {
     $del_id = $_POST['del_id'];
 
     // echo $del_company;
-    $query = "DELETE FROM `companies` WHERE `id` = $del_id";
+    $query = "DELETE FROM `companies` WHERE `name` = '$del_company'";
     $dbh->exec($query);
+    $query2 = "DELETE FROM `workers` WHERE `worker_company` = '$del_company'";
+    $dbh->exec($query2);
+    $query3 = "DELETE FROM `company_admins` WHERE `admin_company` = '$del_company'";
+    $dbh->exec($query3);
 }
 
-// if (isset($_GET['id'])) {
-//     $id = ($_GET['id']);
 
-//     $query = "DELETE FROM `companies` WHERE `id` = $id";
-//     $dbh->exec($query);
+$company_id = $_POST['company_id'];
+$select_tarif = $_POST['select_tarif'];
 
+$sql = "UPDATE `companies` SET `tarif` = '$select_tarif' WHERE `companies`.`id` = '$company_id'";
 
-//     header("Location: /admin.php");
-// }
-
+$dbh->prepare($sql)->execute($params);
 
 
 if (isset($_POST['reg_company_submit'])) {
@@ -73,19 +114,22 @@ if (isset($_POST['reg_company_submit'])) {
 }
 
 
-
+$order_dishes1 = [];
+$order_dishes2 = [];
+$order_dishes3 = [];
+// ob_start();
 
 ?>
 
-
 <!DOCTYPE html>
 <html lang="ru">
+
 
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Личный кабинет</title>
+    <title>Панель администратора</title>
     <meta name="description" content="Организуем корпоративное питание. Работаем с НДС. Получите расчет стоимости! · Доставка в удобное время. Работаем более 8 лет. Работаем с НДС. Все способы оплаты. Собственное производство. Свой штат курьеров">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
@@ -95,229 +139,11 @@ if (isset($_POST['reg_company_submit'])) {
     <link rel="stylesheet" href="css/admin-style.css">
     <link rel="stylesheet" href="icon.css">
     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
-    <!-- </head>
+</head>
+
 <style>
-    .label-create-img {
-        position: absolute;
-        border: 1px solid black;
-        width: 40px;
-        height: 40px;
-        left: 50%;
-        top: 20%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transform: translate(-50%, -50%);
-        font-size: 52px;
-        text-align: center;
-        cursor: pointer;
-        border-radius: 50%;
-        color: #fff;
-        background-color: #777c99;
-        -webkit-transition: background-color 0.3s ease 0s;
-        -o-transition: background-color 0.3s ease 0s;
-        transition: background-color 0.3s ease 0s;
-    }
 
-    .label-create-img:hover {
-        background-color: #61678f;
-    }
-
-    .change-img__title {
-        z-index: 10;
-        font-weight: 800;
-        text-shadow: 0 0 5px 0 #fff;
-        margin-top: -80px;
-        position: absolute;
-        bottom: 10px;
-        left: 0;
-        width: 100%;
-    }
-
-    .change_img-input {
-        display: none;
-    }
-
-    ._tabs-block {
-        display: none;
-        margin: 0 20px;
-    }
-
-    ._tabs-block._active {
-        display: block;
-    }
-
-    .tabs-block__item {
-        font-family: 'sf-regular', sans-serif;
-        border-radius: 20px;
-        padding: 8px 15px;
-        font-size: 14px;
-        margin: 20px auto;
-        font-weight: 400;
-        color: #000;
-        display: flex;
-        cursor: pointer;
-        justify-content: start;
-    }
-
-    .tabs-block__item._active {
-        background-color: #fff;
-        /* background-color: cadetblue; */
-        /* color: #fff; */
-        box-shadow: 0 0 3px 0 rgba(34, 60, 80, 0.980);
-    }
-
-    .tabs-block__item:hover {
-        /* border-radius: 20px;
-    background-color: rgba(95, 158, 160, 0.5);
-    color: #fff; */
-        box-shadow: 0 0 3px 0 rgba(34, 60, 80, 0.780);
-    }
-
-    .side-bar__items {}
-
-    .tabs-block {}
-
-    .tabs-block__item {}
-
-    ._tabs-item {}
-
-    ._active {}
-
-    .tabs-body {
-        width: 100%;
-        min-height: 100vh;
-        position: relative;
-    }
-
-    ._tabs-block {
-        margin-top: 40px;
-    }
-
-    .add-company {
-        display: block;
-        max-width: 250px;
-        position: absolute;
-        left: 50%;
-        top: 30%;
-        transform: translate(-50%, -50%);
-        padding: 20px;
-        border: 2px solid #000
-    }
-
-    .add-company__name {
-        padding: 3px 10px;
-        width: 100%;
-        margin-bottom: 20px;
-    }
-
-    .add-company__img {
-        padding: 3px 10px;
-        width: 100%;
-        margin-bottom: 20px;
-        display: none;
-    }
-
-    .add-company__tarif {
-        padding: 3px 10px;
-        width: 100%;
-        margin-bottom: 20px;
-    }
-
-    .add-company__btn {
-        padding: 10px 20px;
-        border: 2px solid #484848;
-        color: #484848;
-        border-radius: 20px;
-        display: block;
-        text-align: center;
-        cursor: pointer;
-        width: 100%;
-        transition: all 0.3s ease 0s;
-    }
-
-    .add-company__btn:hover {
-        border: 2px solid #484848;
-        color: #fff;
-        background: #484848;
-    }
-
-    .main__item--img--create {
-        position: relative;
-        min-height: 150px;
-        padding: 10px;
-        margin-bottom: 10px;
-    }
-
-    .delete-style {
-        min-width: 400px;
-        /* max-width: 320px; */
-        padding: 10px 10px 18px;
-    }
-
-    .popup-delete {
-        position: relative;
-        background-color: rgb(255, 93, 102);
-        /*top: 30%;*/
-        /*left: 30%;*/
-        margin: 0 auto;
-        display: block;
-        min-height: 140px;
-        max-width: 200px;
-        align-items: center;
-        text-align: center;
-        border-radius: 10px;
-        opacity: 0;
-        transform: translate(0px, -100%);
-        transition: all 0.6s ease;
-    }
-
-    .popup.open .popup-delete {
-        transform: perspective(600px)translate(0px, 0%) rotateX(0deg);
-        opacity: 1;
-    }
-
-    .popup-delete__title {
-        padding: 30px 20px 0;
-        text-align: center;
-        /*overflow-x:hidden;*/
-        word-wrap: break-word;
-        width: 100%;
-    }
-
-    .popup-delete__btns {
-        margin-top: 30px;
-        display: flex;
-        justify-content: space-around;
-        width: 100%;
-    }
-
-    .popup-delete__btn {
-        background-color: #777c99;
-        font-size: 17px;
-        padding: 5px 10px;
-        color: #fff;
-        border: 1px solid #000;
-        display: inline-block;
-        /*margin: 0 auto 20px;*/
-        /* max-width: 130px; */
-        align-items: center;
-        text-align: center;
-        -webkit-transition: background-color 0.3s ease 0s;
-        -o-transition: background-color 0.3s ease 0s;
-        transition: background-color 0.3s ease 0s;
-        cursor: pointer;
-    }
-
-    .popup-delete__btn:hover {
-        background-color: #F92453;
-        color: #fff;
-    }
-
-    .popup-delete__btn-no:hover {
-        background-color: #61678f;
-    }
-</style> -->
+</style>
 
 <body>
     <div class="wrapper">
@@ -331,33 +157,113 @@ if (isset($_POST['reg_company_submit'])) {
                         <img src="img/corp_logo.png" alt="back">
                     </div>
                     <div class="tabs-block">
-                        <div class="tabs-block__item _tabs-item">Заказы</div>
-                        <div class="tabs-block__item _tabs-item _active">Компании</div>
+                        <div class="tabs-block__item _tabs-item _active">Заказы</div>
+                        <div class="tabs-block__item _tabs-item">Компании</div>
                         <div class="tabs-block__item _tabs-item">Меню</div>
                         <div class="tabs-block__item _tabs-item">Статистика</div>
                     </div>
                 </div>
-                <div class="_tabs-block ">
-                    <?php
-                    $sql = "SELECT * FROM `orders` ORDER BY `order_date` DESC";
-                    $rows = $dbh->query($sql);
-                    foreach ($rows as $row) {
-                    ?>
-                        <div class="order-items">
-                            <div><?php echo $row['order_name_worker'] ?></div>
-                            <div><?php echo $row['order_company'] ?></div><br>
-                            <div><?php echo $row['order_dish1'] ?></div>
-                            <div><?php echo $row['order_dish2'] ?></div>
-                            <div><?php echo $row['order_dish3'] ?></div><br>
-                            <div><?php echo $row['order_date'] ?></div>
+                <div class="_tabs-block _active _tabs-block-orders">
+                    <div class="orders-header">
+                        <button class="refresh-btn">Обновить</button>
+                        <div сlass="result__all-wrap">
+                            <button class="print__button" onclick="PrintElem('#result__all')">Печать</button>
                         </div>
-                    <?php } ?>
+                        <?php
+                        $company = $_POST['filter'];
+                        $dateorders = $_POST['ordersfordate'];
+                        ?>
+                        <div class="orders-header__calendar">
+                            <form action="admin.php" method="POST">
+                                <input type="date" name="ordersfordate" id="" value="">
+                                <button type="submit">Выбрать</button>
+                            </form>
+                        </div>
+                        <form action="admin.php" method="POST">
+                            <select type="text" name="filter" id="filter" class="orders-header__select select-orders">
+                                <option value="*">Все</option>
+                                <?php
+                                $sql = "SELECT * FROM `companies`";
+                                $rows = $dbh->query($sql);
+                                foreach ($rows as $row) {
+                                    if ($row['name'] == $company) $selected = " selected";
+                                    else $selected = "";
+                                ?>
+                                    <option value="<?php echo $row['name'] ?>" <? echo $selected; ?>><?php echo $row['name'] ?></option>
+                                <?php } ?>
+                            </select>
+                            <button class="select-orders__btn" type="submit">Выбрать</button>
+                        </form>
+                    </div>
+                    <div class="orders__wrapper" id="result">
+                        <?php
+                        if ($company == "*") $sql = "SELECT * FROM `orders`";
+                        else $sql = "SELECT * FROM `orders` WHERE `order_company` = '$company'";
+                        $rows = $dbh->query($sql);
+                        foreach ($rows as $row) {
+                        ?>
+                            <div class="order-items">
+                                <div class="order-items__header">
+                                    <div class="order-items__wrapper">
+                                        <div class="order-items__number">Номер заказа: <?php echo $row['order_id'] ?></div>
+                                        <div class="order-items__date">Заказ на дату: <span><?php echo $row['order_for_date'] ?></span></div>
+                                    </div>
+                                    <div class="order-items__wrapper">
+                                        <div class="order-items__name"><?php echo $row['order_name_worker'] ?></div>
+                                        <div class="order-items__company">Компания: <span><?php echo $row['order_company'] ?></span></div>
+                                    </div>
+                                </div>
+                                <div class="order-items__orders">
+                                    <div class="orders-item orders-item-1">Заказ №1: <span class="order1"><?php echo $row['order_dish1'] ?></span></div>
+                                    <div class="orders-item orders-item-2">Заказ №2: <span class="order2"><?php echo $row['order_dish2'] ?></span></div>
+                                    <div class="orders-item orders-item-3">Заказ №3: <span class="order3"><?php echo $row['order_dish3'] ?></span></div>
+                                </div>
+                                <div class="order-items__time">Время заказа: <?php echo $row['order_date'] ?></div>
+                            </div>
+                        <?php
+                            $order_dishes1[] = $row['order_dish1'];
+                            $order_dishes2[] = $row['order_dish2'];
+                            $order_dishes3[] = $row['order_dish3'];
+                        }
+                        //$content = ob_get_contents();
+                        //ob_end_clean();
+                        ?>
+
+                        <div class="result__all" id="result__all">
+                            <div class="result__all-company"><?php if ($company == "*") echo "Все компании";
+                                                                else echo $row['order_company'] ?></div><br>
+                            <div class="result__all-view">
+                                <div class="result__all-title">Супы:</div>
+                                <?php
+                                $count_dishes1 = array_count_values($order_dishes1);
+                                foreach ($count_dishes1 as $key => $val) echo '<div class="result__all-item">' . $key . ' - ' . $val . ' шт.,</div>';
+                                ?>
+                            </div><br>
+                            <div class="result__all-view">
+                                <div class="result__all-title">Салаты:</div>
+                                <?php
+                                $count_dishes2 = array_count_values($order_dishes2);
+                                foreach ($count_dishes2 as $key => $val) echo '<div class="result__all-item">' . $key . ' - ' . $val . ' шт.,</div>';
+                                ?>
+                            </div><br>
+                            <div class="result__all-view">
+                                <div class="result__all-title">Второе:</div>
+                                <?php
+                                $count_dishes3 = array_count_values($order_dishes3);
+                                foreach ($count_dishes3 as $key => $val) echo '<div class="result__all-item">' . $key . ' - ' . $val . ' шт.,</div>';
+                                ?>
+                            </div><br>
+
+                        </div>
+                        <? //= $content 
+                        ?>
+                    </div>
                 </div>
-                <div class="_tabs-block _active">
+                <div class="_tabs-block _tabs-block-z">
                     <div class="body-admin__btns">
                         <a href="#popup_add_company" class="body-admin__btn body-admin__add-compan popup-link">Добавить компанию +</a>
                         <a href="#popup_add" class="body-admin__btn body-admin__add-compan popup-link">Добавить админа +</a>
-                        <a href="#" class="body-admin__btn body-admin__add-compan popup-link">Фильтр</a>
+                        <!-- <a href="#" class="body-admin__btn body-admin__add-compan popup-link">Фильтр</a> -->
                     </div>
                     <div class="profile-searche">
                         <a href="#" class="profile-searche__btn">
@@ -376,6 +282,16 @@ if (isset($_POST['reg_company_submit'])) {
                                     <div class="profile-company__img _ibg">
                                         <img src="img/companies/<?php echo $row['img'] ?>" alt="">
                                     </div>
+                                    <!-- <div class="tarif-company">
+                                        <input hidden type="text" name="company_id" class="company_id_change" value="<?php echo $row['id'] ?>">
+                                        <select name="select_tarif" id="select_tarif">
+                                            <option value="<?php echo $row['tarif'] ?>"><?php echo $row['tarif'] ?></option>
+                                            <option value="Стандарт (от 250р)">Стандарт (от 250р)</option>
+                                            <option value="Комфорт (от 350р)">Комфорт (от 350р)</option>
+                                            <option value="Комфорт (от 350р)">Временно отключить</option>
+                                        </select>
+                                        <div class="tarif-company__btn btn">Сохранить</div>
+                                    </div> -->
                                     <div class="profile-company__body">
                                         <div class="profile-company__title">
                                             <?php echo $row['name'] ?>
@@ -389,23 +305,23 @@ if (isset($_POST['reg_company_submit'])) {
                         <?php } ?>
                     </div>
                 </div>
-                <div class="_tabs-block">
-                    3
+                <div class="_tabs-block _tabs-block-z">
+                    Этот раздел находится в разработке
                 </div>
-                <div class="_tabs-block">
-                    4
+                <div class="_tabs-block _tabs-block-z">
+                    Этот раздел находится в разработке
                 </div>
             </div>
         </div>
-        <!-- </div> -->
         <div id="popup_add_company" class="popup popup_add_company">
             <div class="popup__body">
                 <div class="popup__content">
-                    <a href="#header" class="popup__close close-popup">
-                        <img src="img/close.png" alt="">
-                    </a>
+
                     <form action="/admin.php" method="post" class="add-company" enctype="multipart/form-data">
-                        <input type="text" name="company_name" class="add-company__input" placeholder="название компании">
+                        <a href="#header" class="popup__close close-popup">
+                            <img src="img/close.png" alt="">
+                        </a>
+                        <input type="text" name="company_name" class="add-company__input" placeholder="Название компании">
                         <input type="text" name="company_img" class="add-company__img">
                         <div class="main__item--img--create _ibg">
                             <div class="imagePreview" id="imagePreview">
@@ -427,16 +343,15 @@ if (isset($_POST['reg_company_submit'])) {
                 </div>
             </div>
         </div>
-
-
         <div id="popup_add" class="popup popup_add">
             <div class="popup__body">
                 <div class="popup__content">
-                    <a href="#header" class="popup__close close-popup">
-                        <img src="img/close.png" alt="">
-                    </a>
+
                     <form action="/admin.php" method="post" class="add-company">
-                        <input type="text" name="admin_name" class="add-company__input" placeholder="имя админа">
+                        <a href="#header" class="popup__close close-popup">
+                            <img src="img/close.png" alt="">
+                        </a>
+                        <input type="text" name="admin_name" class="add-company__input" placeholder="Имя админа">
                         <select name="company_name" class="add-company__name add-company__input" id="">
                             <?php
                             $sql = "SELECT * FROM `companies`";
@@ -446,8 +361,8 @@ if (isset($_POST['reg_company_submit'])) {
                                 <option value="<?php echo $row['name'] ?>"><?php echo $row['name'] ?></option>
                             <?php } ?>
                         </select>
-                        <input type="password" name="admin_password" class="add-company__input" placeholder="пароль админа">
-                        <input type="password" name="admin_pass_confirm" class="add-company__input" placeholder="подтверждение пароля">
+                        <input type="password" name="admin_password" class="add-company__input" placeholder="Пароль админа">
+                        <input type="password" name="admin_pass_confirm" class="add-company__input" placeholder="Подтверждение пароля">
                         <button type="submit" name="reg_admin_submit" class="add-company__btn">
                             Добавить
                         </button>
@@ -483,11 +398,31 @@ if (isset($_POST['reg_company_submit'])) {
         <?php } ?>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
         <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+        <script src="js/izotope.min.js"></script>
         <script src="script.js"></script>
         <script>
+            $('#filter').change(function() {
+                $.ajax({
+                    method: "POST",
+                    url: "admin.php",
+                    data: {
+                        filter: $("#filter").val()
+                    },
+                    success: function(response) {
+                        console.log($("#filter").val())
+                    }
+                });
+            });
+
+            let refreshBtn = document.querySelector('.refresh-btn');
+            refreshBtn.addEventListener('click', function() {
+                window.location.reload()
+            })
+
+
+
+
             // search
-
-
             window.onload = () => {
                 let input = document.querySelector('.profile-searche__input');
                 let hrefAttr = document.querySelector('.profile-company-wrapper');
@@ -542,6 +477,24 @@ if (isset($_POST['reg_company_submit'])) {
                     }
 
                 });
+            }
+        </script>
+        <script type="text/javascript">
+            function PrintElem(elem) {
+                Popup($(elem).html());
+            }
+
+            function Popup(data) {
+                var mywindow = window.open('', 'result__all', 'height=400,width=600');
+                mywindow.document.write('<html><head><title>Заказы на завтра</title>');
+                mywindow.document.write('</head><body >');
+                mywindow.document.write(data);
+                mywindow.document.write('</body></html>');
+                mywindow.document.close(); // necessary for IE >= 10
+                mywindow.focus(); // necessary for IE >= 10
+                mywindow.print();
+                mywindow.close();
+                return true;
             }
         </script>
         <!-- Yandex.Metrika counter -->

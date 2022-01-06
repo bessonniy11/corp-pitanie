@@ -332,3 +332,50 @@
     border: none;
     text-align: center;
 }
+@media (max-width: 1050px) {
+    .order-item__select {
+        width: 243px;
+        font-size: 9px;
+    }
+    .worker-profile .container {
+        padding: 0px 15px;
+    }
+}
+@media (max-width: 790px) {
+    .form-order__items {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+
+    }
+    .popup__body {
+        margin-top: 0;
+    }
+    .popup__content {
+        max-width: 100%;
+    }
+    .worker-profile__header {
+        display: block;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .profile-header__avatar {
+        flex: 0 0 50px;
+        height: 50px;
+        margin-right: 12px;
+    }
+    .profile-header__name {
+        font-size: 18px;
+    }
+}
+@media (max-width: 400px) {
+    .profile-header__company-img {
+        max-width: 105px;
+        margin: 0 auto;
+    }
+    .profile-header__wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}

@@ -1022,28 +1022,382 @@ for (let index = 0; index < menutabs.length; index++) {
 }
 
 // CHANGE-TARIF
-let changeTarif = document.querySelector('.tarif-changed__link');
-if (changeTarif) {
-    changeTarif.addEventListener('click', function (e) {
-        let changeBody = document.querySelector('.tarif-changed__body');
-        changeBody.classList.toggle('_active');
+let tarifBtn = document.querySelector('.tarif-changed__link');
+let tarifPopup = document.querySelector('.tarif-changed__body');
+if (tarifBtn) {
+    tarifBtn.addEventListener('click', function (e) {
         e.preventDefault();
-
-    });
+        tarifPopup.classList.toggle('_active');
+    })
 }
 
 
-let changeMenuItems = document.querySelectorAll('.change_popup__item');
-for (let index = 0; index < changeMenuItems.length; index++) {
-    let changeMenuItem = changeMenuItems[index];
-    changeMenuItem.addEventListener('click', function () {
-        changeMenuItem.classList.toggle('hidden');
-        // let status = document.querySelectorAll('.change_popup__status');
-        // status.innerHTML = "Crehsn";
-        // let status = document.querySelectorAll('.change_popup__status');
-        // for (let index = 0; index < status.length; index++) {
-        //     let stat = status[index];
-        //     stat.innerHTML = "Crehsn"
-        // }
-    });
+let tarif = document.getElementById('tarif-selected');
+let tarifItems = document.querySelectorAll('.tarif-changed__item');
+let companyItems = document.querySelectorAll('.company-menu__body');
+
+
+for (let index = 0; index < tarifItems.length; index++) {
+    const tarifItem = tarifItems[index];
+    tarifItem.addEventListener('click', function () {
+        // 
+        tarifPopup.classList.remove('_active');
+        tarif.textContent = tarifItem.textContent;
+        let companyItems = document.querySelectorAll('.company-menu__body');
+        for (let index = 0; index < companyItems.length; index++) {
+            const companyItem = companyItems[index];
+            // console.log(OrderItem.getAttribute('data-name'));
+            if (companyItem.textContent !== tarifItem.textContent) {
+                companyItem.classList.add('hidden')
+
+            }
+        }
+    })
 }
+
+
+
+// let changeMenuItems = document.querySelectorAll('.change_popup__item');
+// for (let index = 0; index < changeMenuItems.length; index++) {
+//     let changeMenuItem = changeMenuItems[index];
+//     changeMenuItem.addEventListener('click', function () {
+//         changeMenuItem.classList.toggle('hidden');
+//         // let status = document.querySelectorAll('.change_popup__status');
+//         // status.innerHTML = "Crehsn";
+//         // let status = document.querySelectorAll('.change_popup__status');
+//         // for (let index = 0; index < status.length; index++) {
+//         //     let stat = status[index];
+//         //     stat.innerHTML = "Crehsn"
+//         // }
+//     });
+// }
+
+// SAVE ORDER
+$('.popup-change__btn-yes').on('click', function () {
+
+    var worker_name = $('#worker_name').val();
+    var worker_company = $('#worker_company').val();
+    var datefororder = $('#datefororder').val();
+    var item1 = $('#item1').val();
+    var item2 = $('#item2').val();
+    var item3 = $('#item3').val();
+    var item4 = $('#item4').val();
+    // alert(item4);
+    // console.log(item4);
+    $.ajax({
+        method: "POST",
+        url: "admin.php",
+        data: {
+            worker_name: worker_name,
+            worker_company: worker_company,
+            datefororder: datefororder,
+            item1: item1,
+            item2: item2,
+            item3: item3,
+            item4: item4
+        },
+        success: function (response) {
+            console.log('Заказ отправлен')
+            // test = '<div>TEST TEST TEST</div>'
+            // console.log(test)
+            // $('#result').html(response);
+            // ubdateResult();
+
+            Swal.fire({
+                title: 'Спасибо, ваш заказ принят!',
+                confirmButtonColor: "#484848",
+            })
+            // $('.order-img').src = "img/null.png";
+            let orderImg = document.querySelectorAll('.order-img');
+            orderImg.forEach(function (e) {
+                e.src = "img/null.png";
+            })
+            let selectItem = document.querySelectorAll('.order-item__select');
+            selectItem.forEach(function (el) {
+                el.value = "";
+            })
+        }
+    }).done(function (msg) {
+        // console.log(msg)
+    });
+})
+
+$('.tarif-company__btn').on('click', function () {
+
+    var select_tarif = $('#select_tarif').val();
+    var company_id = $('.company_id_change').val();
+    // alert(item4)
+    // console.log(item4);
+    $.ajax({
+        method: "POST",
+        url: "admin.php",
+        data: {
+            select_tarif: select_tarif,
+            company_id: company_id
+        },
+        success: function (response) {
+            console.log('Тариф изменён!')
+            // test = '<div>TEST TEST TEST</div>'
+            // console.log(test)
+            // $('#result').html(response);
+            // ubdateResult();
+
+
+            // $('.order-img').src = "img/null.png";
+        }
+    }).done(function (msg) {
+        // console.log(msg)
+    });
+    // Swal.fire({
+    //     title: 'Тариф изменён!',
+    //     confirmButtonColor: "#484848",
+    // })
+})
+
+let order1 = document.querySelectorAll('.order1');
+let order2 = document.querySelectorAll('.order2');
+let order3 = document.querySelectorAll('.order3');
+let quanityOrder = document.querySelector('.quanity');
+let quanityOrder2 = document.querySelector('.quanity2');
+let quanityOrder3 = document.querySelector('.quanity3');
+
+// order1.forEach(element => {
+//     arr = element.textContent;
+//     let solyanka = 'Солянка'
+//     let quanity = 0;
+//     if (arr[0].textContent == solyanka) {
+//         quanityOrder.textContent = arr[0].textContent;
+//         let quanityOrder = document.querySelector('.quanity');
+//         quanityOrder.innerHTML = +1;
+//     }
+//     console.log(arr)
+// });
+
+
+// let arr = Array.from(order1)
+
+// let order1 = document.querySelectorAll('.order1');
+// let order2 = document.querySelectorAll('.order2');
+// let order3 = document.querySelectorAll('.order3');
+
+// let orderObj = {};
+// order1.forEach((element) => {
+//     if (orderObj[element.textContent] === undefined) {
+//         orderObj[element.textContent] = 0;
+//         orderObj[element.textContent]++;
+//     } else {
+//         orderObj[element.textContent]++;
+//     }
+// });
+// Object.keys(orderObj).map((e) => {
+//     console.log(e + " - " + orderObj[e] + " шт.");
+// });
+
+// let orderObj2 = {};
+// order2.forEach((element) => {
+//     if (orderObj2[element.textContent] === undefined) {
+//         orderObj2[element.textContent] = 0;
+//         orderObj2[element.textContent]++;
+//     } else {
+//         orderObj2[element.textContent]++;
+//     }
+// });
+// Object.keys(orderObj2).map((e) => {
+//     console.log(e + " - " + orderObj2[e] + " шт.");
+
+// });
+
+// let orderObj3 = {};
+// order3.forEach((element) => {
+//     if (orderObj3[element.textContent] === undefined) {
+//         orderObj3[element.textContent] = 0;
+//         orderObj3[element.textContent]++;
+//     } else {
+//         orderObj3[element.textContent]++;
+//     }
+// });
+// Object.keys(orderObj3).map((e) => {
+//     console.log(e + " - " + orderObj3[e] + " шт.");
+// });
+
+
+
+// let filterBtn = document.querySelector('.tabs-block__filter-btn');
+            // let filterPopup = document.querySelector('.filter__popup');
+            // filterBtn.addEventListener('click', function(e) {
+            //     e.preventDefault();
+            //     filterPopup.classList.toggle('active');
+            // })
+
+            // let filter = document.getElementById('filter');
+            // let filterItems = document.querySelectorAll('.filter__popup-item');
+            // let OrderItems = document.querySelectorAll('.order-items__company');
+
+
+            // for (let index = 0; index < filterItems.length; index++) {
+            //     const filterItem = filterItems[index];
+            //     filterItem.addEventListener('click', function() {
+            //         // 
+            //         filter.textContent = filterItem.textContent;
+            //         let OrderItems = document.querySelectorAll('.order-items__company');
+            //         for (let index = 0; index < OrderItems.length; index++) {
+            //             const OrderItem = OrderItems[index];
+            //             // console.log(OrderItem.getAttribute('data-name'));
+            //             if (OrderItem.textContent !== filterItem.textContent) {
+            //                 OrderItem.classList.add('hidden')
+            //             }
+            //         }
+            //     })
+            // }
+            // const elem = document.querySelector('.orders__wrapper');
+            // const iso = new Isotope(elem, {
+            //     // options
+            //     itemSelector: '.order-items',
+            // });
+            // document.querySelectorAll('.filter__popup-item').forEach(el => {
+            //     el.addEventListener('click', (e) => {
+            //         let filter = e.currentTarget.dataset.filter;
+
+            //         iso.arrange({
+            //             filter: `${filter}`
+            //         });
+            //     });
+            // });
+
+            // filter.addEventListener('change', function() {
+            //     for (let index = 0; index < OrderItems.length; index++) {
+            //         const OrderItem = OrderItems[index];
+            //         if (OrderItem.getAttribute('data-name') == filter.value) {
+            //             console.log('ok')
+            //         }
+            //     }
+            // })
+
+            // OrderItems.getAttribute('data-name')
+
+
+
+// console.log(arr[0].textContent);
+
+
+// console.log(result);
+
+// function count(array) {
+//     var names = {};
+//     array.forEach(item => {
+//         names[item] = (names[item] || 0) + 1;
+//     });
+//     console.log(names);
+// }
+// count(arr)
+// arr.forEach(element => {
+//     console.log(element.textContent)
+
+// });
+
+
+
+
+// var count = {};
+// order1.forEach(function (i) { count[i] = (count[i] || 0) + 1; });
+// console.log(result);
+
+// var values = [].map.call(order1, function (obj) {
+//     console.log(obj.textContent);
+// });
+
+// function count() {
+//     let order1 = document.querySelectorAll('.order1');
+//     let order2 = document.querySelectorAll('.order2');
+//     let order3 = document.querySelectorAll('.order3');
+
+//     let array_elements = Array.from(order1)
+//     // arr.forEach(element => {
+//     //     console.log(element.textContent)
+//     // });
+//     array_elements.sort();
+
+//     var current = null;
+//     var cnt = 0;
+//     for (var i = 0; i < array_elements.length; i++) {
+//         if (array_elements[i] != current) {
+//             if (cnt > 0) {
+//                 document.write(current + ' comes --> ' + cnt + ' times<br>');
+//             }
+//             current = array_elements[i];
+//             cnt = 1;
+//         } else {
+//             cnt++;
+//         }
+//     }
+//     if (cnt > 0) {
+//         document.write(current + ' comes --> ' + cnt + ' times');
+//     }
+
+// }
+// count()
+
+
+// console.log(order1.length)
+
+
+// order1.forEach(element => {
+//     // let arr = [];
+//     // let arr = Array.from(order1.textContent)
+//     // nodes = Array.prototype.slice.call(order1);
+//     arr = element.textContent
+//     console.log(arr)
+// });
+
+
+// order2.forEach(element => {
+//     console.log(element.textContent)
+// });
+// order3.forEach(element => {
+//     console.log(element.textContent)
+// });
+
+
+
+
+
+// function count() {
+//     let array_elements = document.querySelectorAll('.order1');
+//     array_elements.forEach(element => {
+//         let arr = [element.textContent];
+//         arr.sort();
+
+//         var current = null;
+//         var cnt = 0;
+//         for (var i = 0; i < array_elements.length; i++) {
+//             if (array_elements[i] != current) {
+//                 if (cnt > 0) {
+//                     document.write(current + ' comes --> ' + cnt + ' times<br>');
+//                 }
+//                 current = array_elements[i];
+//                 cnt = 1;
+//             } else {
+//                 cnt++;
+//             }
+//         }
+//         if (cnt > 0) {
+//             console.log(current + ' comes --> ' + cnt + ' times');
+//         }
+//     });
+
+
+// }
+// count()
+
+// console.log(order1);
+
+// var arr = [1, 3, 4, 1, 1, 3, 4, 5];
+// var result = {};
+// order1.forEach(function (a) {
+//     if (result[a] != undefined)
+//         ++result[a];
+//     else
+//         result[a] = 1;
+// });
+// for (var key in result)
+//     console.log('число ' + key + ' == ' + result[key] + ' раз(а) <br>');

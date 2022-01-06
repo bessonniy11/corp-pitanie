@@ -87,8 +87,8 @@ $companyImg = $fetchCompany->fetch(PDO::FETCH_ASSOC);
                 </div>
                 <div class="worker-profile__body worker-body">
                     <div class="worker-body__timer">
-                        Заказы на завтра
-                        <span id="span"> </span>
+                        Заказы на завтра принимаются до 20:00
+                        <!-- <span id="span"> </span> -->
                     </div>
                     <div class="worker-body__title">
                         Выберите меню на <span id="tomorrow"> </span>
@@ -244,25 +244,26 @@ $companyImg = $fetchCompany->fetch(PDO::FETCH_ASSOC);
                         </a>
 
                         <div class="change-body">
-                            <form action="order.php" method="POST">
-                                <div class="popup-change__title">
-                                    Ваш заказ: <br>
-                                </div>
-                                <input hidden type="text" name="worker_name" value="<?= $worker['worker_name'] ?>">
-                                <input hidden type="text" name="worker_company" value="<?= $worker['worker_company'] ?>">
-                                <input name="item1" readonly class="popup-change__item popup-change__item1">
-                                <input name="item2" readonly class="popup-change__item popup-change__item2">
-                                <input name="item3" readonly class="popup-change__item popup-change__item3">
-                                <input hidden type="text" id="item4" name="item4">
-                                <div class="popup-change__btns">
-                                    <button type="submit" name="order_submit" class="popup-change__btn btn popup-change__btn-yes" href="#">
-                                        Подтверждаю!
-                                    </button>
-                                    <a class="popup-change__btn btn popup-change__btn-no">
-                                        Ещё подумаю...
-                                    </a>
-                                </div>
-                            </form>
+                            <!-- <form> -->
+                            <div class="popup-change__title">
+                                Ваш заказ: <br>
+                            </div>
+                            <input hidden type="text" id="worker_name" name="worker_name" value="<?= $worker['worker_name'] ?>">
+                            <input hidden type="text" id="worker_company" name="worker_company" value="<?= $worker['worker_company'] ?>">
+                            <input hidden type="text" class="datefororder" id="datefororder" name="datefororder" value="">
+                            <input name="item1" id="item1" readonly class="popup-change__item popup-change__item1">
+                            <input name="item2" id="item2" readonly class="popup-change__item popup-change__item2">
+                            <input name="item3" id="item3" readonly class="popup-change__item popup-change__item3">
+                            <input hidden type="text" id="item4" class="item4" name="item4">
+                            <div class="popup-change__btns">
+                                <button class="popup-change__btn btn popup-change__btn-yes">
+                                    Подтверждаю!
+                                </button>
+                                <a class="popup-change__btn btn popup-change__btn-no">
+                                    Ещё подумаю...
+                                </a>
+                            </div>
+                            <!-- </form> -->
                         </div>
                     </div>
                 </div>
@@ -310,40 +311,6 @@ $companyImg = $fetchCompany->fetch(PDO::FETCH_ASSOC);
                 selectGarnirImg.classList.remove('animate__backInRight');
             }, 1000);
         });
-
-
-        $("#selection").ddslick({
-            width: "100%",
-            imagePosition: "right",
-            // selectText: "Change",
-            onSelected: function(data) {
-                $(".selected1").html(data.selectedData.value);
-            }
-        })
-        $("#selection2").ddslick({
-            width: "100%",
-            imagePosition: "right",
-            // selectText: "Change",
-            onSelected: function(data) {
-                $(".selected2").html(data.selectedData.value);
-            }
-        })
-        $("#selection3").ddslick({
-            width: "100%",
-            imagePosition: "right",
-            // selectText: "Change",
-            onSelected: function(data) {
-                $(".selected3").html(data.selectedData.value);
-            }
-        })
-        $("#selection4").ddslick({
-            width: "100%",
-            imagePosition: "right",
-            // selectText: "Change",
-            onSelected: function(data) {
-                $(".selected4").html(data.selectedData.value);
-            }
-        })
     </script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
@@ -352,46 +319,6 @@ $companyImg = $fetchCompany->fetch(PDO::FETCH_ASSOC);
         let swalBtn = document.querySelector(".popup-change__btn-yes");
         let queBtn = document.querySelector(".form-order__btn");
 
-        swalBtn.addEventListener('click', function(e) {
-            // e.preventDefault();
-            Swal.fire({
-                title: 'Спасибо, ваш заказ принят!',
-                confirmButtonColor: "#484848",
-            })
-        });
-        // swalBtn.addEventListener('click', function(e) {
-        //     e.preventDefault();
-        //     url: 'database/order.php',
-        //         Swal.fire({
-        //             title: 'Спасибо, ваш заказ принят!',
-        //             confirmButtonColor: "#484848",
-        //         })
-        //     let hero = document.querySelector('.form-question__1');
-        //     let hero2 = document.querySelector('.form-question__2');
-        //     let selectItem = document.querySelectorAll('.order-item__select');
-        //     selectItem.forEach(function(el) {
-        //         el.value = "null.png";
-        //     })
-
-        //     let orderImg = document.querySelectorAll('.order-img');
-        //     orderImg.forEach(function(e) {
-        //         e.src = "img/null.png";
-        //     })
-
-        //     orderImg.src = "img/null.png";
-
-        //     // selectItems.value = "null.png";
-        //     // hero.value = "";
-        //     // hero2.value = "";
-        //     // hero.setAttribute("disabled", "disabled");
-        //     // hero2.setAttribute("disabled", "disabled");
-        //     queBtn.classList.add("disabled");
-
-        //     window.setTimeout(() => {
-        //         queBtn.classList.remove("disabled");
-
-        //     }, 60000);
-        // })
 
         queBtn.addEventListener('click', function(e) {
             let selectSoups = document.querySelector(".select-soups");
@@ -401,7 +328,7 @@ $companyImg = $fetchCompany->fetch(PDO::FETCH_ASSOC);
             let formItem2 = document.querySelector(".popup-change__item2");
             let formItem3 = document.querySelector(".popup-change__item3");
 
-            console.log(selectSoups.value);
+            // console.log(selectSoups.value);
             formItem1.value = selectSoups.value.split(',')[0];
             formItem2.value = selectSalats.value.split(',')[0];
             formItem3.value = selectGarnir.value.split(',')[0];
@@ -437,12 +364,12 @@ $companyImg = $fetchCompany->fetch(PDO::FETCH_ASSOC);
         today = mm + '/' + dd + '/' + yyyy;
 
         const startDate = new Date(`${today} 21:00:00`);
-        console.log(startDate);
+        // console.log(startDate);
 
 
         const timer = document.getElementById('span');
         const tomorrow = document.getElementById('tomorrow');
-
+        const datefororder = document.getElementById('datefororder');
 
         window.setInterval(() => {
             let date = new Date();
@@ -454,16 +381,18 @@ $companyImg = $fetchCompany->fetch(PDO::FETCH_ASSOC);
             let hoursReal = String(date.getHours()).padStart(2, '0');
             let minutesReal = String(date.getMinutes()).padStart(2, '0');
             let secondsReal = String(date.getSeconds()).padStart(2, '0');
-            console.log(hoursReal);
+            // console.log(hoursReal);
             //2 weeks in milliseconds
             // if ((date - startDate) / oneDay < 60) return;
+
+            datefororder.value = `${date.getDate() + 1}.${date.getMonth() + 1}.${date.getFullYear()}`;
             tomorrow.innerText = `${date.getDate() + 1}.${date.getMonth() + 1}.${date.getFullYear()}`;
             // console.log(`${(Math.floor((date - startDate) / minutes) % 60)}:${(Math.floor((date - startDate) / seconds) % 60)}`);
-            if (hoursReal < 21) {
-                timer.innerText = `принимаются ещё ${(Math.floor((date - startDate) / hours) % 12)}:${(Math.floor((date - startDate) / minutes) % 60)}:${(Math.floor((date - startDate) / seconds) % 60)}`;
-            } else {
-                timer.innerText = 'уже не принимаются';
-            }
+            // if (hoursReal < 21) {
+            //     timer.innerText = `принимаются ещё ${(Math.floor((date - startDate) / hours) % 12)}:${(Math.floor((date - startDate) / minutes) % 60)}:${(Math.floor((date - startDate) / seconds) % 60)}`;
+            // } else {
+            //     timer.innerText = 'уже не принимаются';
+            // }
 
 
             // timer.replace('-', '');

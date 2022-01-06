@@ -271,7 +271,7 @@
 	/* cursor: zoom-out; */
 }
 .popup.open .popup__content {
-	transform: translate(-50%, 0%) ;
+	transform: translate(-50%,-50%) ;
 	opacity: 1;
 }
 

@@ -363,7 +363,7 @@ body.lock {
 	/* cursor: zoom-out; */
 }
 .popup.open .popup__content {
-	transform: translate(-50%, -50%) ;
+	/* transform: translate(-50%, -50%) ; */
 	opacity: 1;
 }
 
@@ -396,10 +396,10 @@ body.lock {
 	position: relative;
 	transition: transform 0.5s ease 0s;
 	opacity: 0;
-    position: absolute;
-    left: 50%;
+    /* position: absolute;
+    left: 50%; */
     /* top: 50%; */
-	transform: translate(-50%, -50%);
+	/* transform: translate(-50%, -50%); */
 }
 .popup__content.newworker{
     margin-top: -70px;
@@ -583,7 +583,7 @@ body.lock {
         text-decoration: none;
     }
     .popup__body {
-        margin-top: 25px;
+        margin-top: -50px;
     }
 }
 
