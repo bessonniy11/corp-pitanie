@@ -199,6 +199,7 @@
 }
 .profile-header__company-img {
     flex: 0 0 126px;
+    max-width: 200px;
     height: 30px;
     position: relative;
 }
@@ -239,13 +240,14 @@
 .form-order {
 }
 .form-order__items {
-    /* display: flex;
+    display: flex;
     align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap; */
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    justify-content: center;
+    flex-wrap: wrap;
     gap: 20px;
+    /* display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px; */
 }
 .form-order__item {
 }

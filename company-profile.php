@@ -87,7 +87,7 @@ $companyImg = $fetchCompany->fetch(PDO::FETCH_ASSOC);
     <link href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <link rel="icon" href="./img/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="profile-style.css">
+    <link rel="stylesheet" href="css/profile-style.css">
     <link rel="stylesheet" href="css/company-profile.css">
     <link rel="stylesheet" href="icon.css">
     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
@@ -111,9 +111,9 @@ $companyImg = $fetchCompany->fetch(PDO::FETCH_ASSOC);
                 <div class="company-profile__switch _tabs-item _active">
                     Сотрудники
                 </div>
-                <div class="company-profile__switch _tabs-item  admin-menu">
+                <!-- <div class="company-profile__switch _tabs-item  admin-menu">
                     Меню
-                </div>
+                </div> -->
             </div>
 
             <div class="_tabs-block _active">
@@ -464,10 +464,10 @@ $companyImg = $fetchCompany->fetch(PDO::FETCH_ASSOC);
                             </div>
                             <input readonly class="popup__content-company" name="worker_company" value="<?= $companyImg['name'] ?>">
                             <input type="text" name="worker_name" placeholder="Введите ФИО" />
-                            <input type="text" name="worker_login" placeholder="Введите Логин" />
-                            <input type="tel" name="worker_phone" placeholder="Телефон сотрудника" data-validate-field="tel" />
-                            <input type="password" name="worker_password" placeholder="Пароль" />
-                            <input type="password" name="worker_pass_confirm" placeholder="Подтвердить" />
+                            <input type="text" required name="worker_login" placeholder="Введите Логин" />
+                            <input type="tel" required name="worker_phone" placeholder="Телефон сотрудника" data-validate-field="tel" />
+                            <input type="password" required name="worker_password" placeholder="Пароль" />
+                            <input type="password" required name="worker_pass_confirm" placeholder="Подтвердить" />
                             <button type="submit" name="worker_reg" class="register-form__btn btn">Добавить</button>
                             <!-- <p class="message">Вход для администратора <a href="#">Войти</a></p> -->
                         </form>
@@ -591,15 +591,10 @@ $companyImg = $fetchCompany->fetch(PDO::FETCH_ASSOC);
         // search
         window.onload = () => {
             let workerSearch = document.querySelector('.worker-searche__input');
-            // let hrefAttr = document.querySelector('.profile-company-wrapper');
-            // let profileComp = document.querySelectorAll('.profile-company');
-            // console.log(hrefAttr.getAttribute('href').replace('#', ''));
-
 
             workerSearch.oninput = function() {
                 let value = this.value.trim().toLowerCase();
                 let list = document.querySelectorAll('.workers-list__link');
-                // let listtitle = document.querySelectorAll('.profile-company__title');
 
                 if (value != '') {
                     list.forEach(elem => {

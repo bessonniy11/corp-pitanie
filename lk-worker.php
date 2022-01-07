@@ -38,6 +38,8 @@ $companyImg = $fetchCompany->fetch(PDO::FETCH_ASSOC);
 // $fetchCompany = $dbh->prepare($sql);
 // $fetchCompany->execute($params);
 // $workerTrue = $fetchCompany->fetch(PDO::FETCH_ASSOC);
+$companyTarif =  $companyImg['tarif'];
+
 
 ?>
 <!DOCTYPE html>
@@ -53,8 +55,8 @@ $companyImg = $fetchCompany->fetch(PDO::FETCH_ASSOC);
     <link href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <link rel="icon" href="./img/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="lk-worker-style.css">
-    <link rel="stylesheet" href="profile-style.css">
+    <link rel="stylesheet" href="css/lk-worker-style.css">
+    <link rel="stylesheet" href="css/profile-style.css">
     <link rel="stylesheet" href="icon.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
@@ -85,64 +87,161 @@ $companyImg = $fetchCompany->fetch(PDO::FETCH_ASSOC);
                         <img src="img/companies/<?= $companyImg['img'] ?>" alt="">
                     </div>
                 </div>
-                <div class="worker-profile__body worker-body">
-                    <div class="worker-body__timer">
-                        Заказы на завтра принимаются до 20:00
-                        <!-- <span id="span"> </span> -->
-                    </div>
-                    <div class="worker-body__title">
-                        Выберите меню на <span id="tomorrow"> </span>
-                    </div>
-                    <form class="worker-body__form form-order">
-                        <div class="form-order__items">
-                            <div class="form-order__item order-item">
-                                <input hidden type="text" name="worker_name" value="<?= $worker['worker_name'] ?>">
-                                <input hidden type="text" name="worker_company" value="<?= $worker['worker_company'] ?>">
-                                <select name="item1" class="order-item__select select-soups order-item__select-hidden">
-                                    <option hidden value="">Выберите</option>
-                                    <option value="Гороховый,01.jpg">Гороховый</option>
-                                    <option value="Лагман,02.png">Лагман</option>
-                                    <option value="Куриный с лапшой,03.png">Куриный с лапшой</option>
-                                    <option value="Солянка,04.png">Солянка</option>
-                                </select>
-                                <div class="order-item__img animate__animated order-soups">
-                                    <img class="animate__animated order-img" src="img/null.png" alt="">
-                                </div>
-                            </div>
-                            <div class="form-order__item order-item">
-                                <select id="" class="order-item__select select-salats order-item__select-hidden">
-                                    <option hidden value="">Выберите</option>
-                                    <option value='Морковь "по-корейски",01.png'>Морковь "по-корейски"</option>
-                                    <option value="Греческий,02.png">Греческий</option>
-                                    <option value="Куриный с капустой,03.png">Куриный с капустой</option>
-                                    <option value="Сельдь под шубой,04.png">Сельдь под шубой</option>
-                                    <option value="Капуста квашенная,05.png">Капуста квашенная</option>
-                                    <option value="Оливье,06.png">Оливье</option>
-                                </select>
-                                <div class="order-item__img order-salats">
-                                    <img class="animate__animated order-img" src="img/null.png" alt="">
-                                </div>
-                            </div>
-                            <div class="form-order__item order-item">
-                                <select name="item3" id="" class="order-item__select select-garnir order-item__select-hidden">
-                                    <option hidden value="">Выберите</option>
-                                    <option value="Гречка,01.png">Гречка</option>
-                                    <option value="Рис отварной,02.png">Рис отварной</option>
-                                    <option value="Макароны отварные,03.png">Макароны отварные</option>
-                                    <option value="Белая фасоль с томатами,04.png">Белая фасоль с томатами</option>
-                                    <option value="Капуста цветная,05.png">Капуста цветная</option>
-                                    <option value="Пюре картофельное,06.png">Пюре картофельное</option>
-                                </select>
-                                <div class="order-item__img order-garnir">
-                                    <img class="animate__animated order-img" src="img/null.png" alt="">
-                                </div>
-                            </div>
-                            <!-- <button type="submit" name="order_submit">Order</button> -->
+                <?php if ($companyTarif == 'Мини (от 200р)') { ?>
+                    <div class="worker-profile__body worker-body">
+                        <div class="worker-body__timer">
+                            Заказы на завтра принимаются до 20:00
+                            <!-- <span id="span"> </span> -->
                         </div>
-                    </form>
-                    <a href="#popup_change" class="form-order__btn btn popup-link">
-                        ПОДТВЕРИТЬ ЗАКАЗ
-                    </a>
+                        <div class="worker-body__title">
+                            Выберите меню на <span id="tomorrow"> </span>
+                        </div>
+                        <form class="worker-body__form form-order">
+                            <div class="form-order__items">
+                                <div class="form-order__item order-item">
+                                    <input hidden type="text" name="worker_name" value="<?= $worker['worker_name'] ?>">
+                                    <input hidden type="text" name="worker_company" value="<?= $worker['worker_company'] ?>">
+                                    <select name="item1" class="order-item__select select-soups order-item__select-hidden">
+                                        <option hidden value="">Выберите</option>
+                                        <option value="Гороховый,01.jpg">Гороховый</option>
+                                        <option value="Лагман,02.png">Лагман</option>
+                                        <option value="Куриный с лапшой,03.png">Куриный с лапшой</option>
+                                        <option value="Солянка,04.png">Солянка</option>
+                                        <option value="Харчо из баранины,harcho.png">Харчо из баранины</option>
+                                        <option value="Шурпа из говядины,shurpa.png">Шурпа из говядины</option>
+                                        <option value="Суп-пюре тыквенный,souptykvenniy.png">Суп-пюре тыквенный</option>
+                                    </select>
+                                    <div class="order-item__img animate__animated order-soups">
+                                        <img class="animate__animated order-img" src="img/null.png" alt="">
+                                    </div>
+                                </div>
+                                <!-- <button type="submit" name="order_submit">Order</button> -->
+                            </div>
+                        </form>
+                        <a href="#popup_change" class="form-order__btn btn popup-link">
+                            ПОДТВЕРИТЬ ЗАКАЗ
+                        </a>
+                    </div>
+                <?php } ?>
+                <?php if ($companyTarif == 'Стандарт (от 250р)') { ?>
+                    <div class="worker-profile__body worker-body">
+                        <div class="worker-body__timer">
+                            Заказы на завтра принимаются до 20:00
+                            <!-- <span id="span"> </span> -->
+                        </div>
+                        <div class="worker-body__title">
+                            Выберите меню на <span id="tomorrow"> </span>
+                        </div>
+                        <form class="worker-body__form form-order">
+                            <div class="form-order__items">
+                                <div class="form-order__item order-item">
+                                    <input hidden type="text" name="worker_name" value="<?= $worker['worker_name'] ?>">
+                                    <input hidden type="text" name="worker_company" value="<?= $worker['worker_company'] ?>">
+                                    <select name="item1" class="order-item__select select-soups order-item__select-hidden">
+                                        <option hidden value="">Выберите</option>
+                                        <option value="Гороховый,01.jpg">Гороховый</option>
+                                        <option value="Лагман,02.png">Лагман</option>
+                                        <option value="Куриный с лапшой,03.png">Куриный с лапшой</option>
+                                        <option value="Солянка,04.png">Солянка</option>
+                                        <option value="Харчо из баранины,harcho.png">Харчо из баранины</option>
+                                        <option value="Шурпа из говядины,shurpa.png">Шурпа из говядины</option>
+                                        <option value="Суп-пюре тыквенный,souptykvenniy.png">Суп-пюре тыквенный</option>
+                                    </select>
+                                    <div class="order-item__img animate__animated order-soups">
+                                        <img class="animate__animated order-img" src="img/null.png" alt="">
+                                    </div>
+                                </div>
+                                <div class="form-order__item order-item">
+                                    <select id="" class="order-item__select select-salats order-item__select-hidden">
+                                        <option hidden value="">Выберите</option>
+                                        <option value='Морковь "по-корейски",01.png'>Морковь "по-корейски"</option>
+                                        <option value="Греческий,02.png">Греческий</option>
+                                        <option value="Куриный с капустой,03.png">Куриный с капустой</option>
+                                        <option value="Сельдь под шубой,04.png">Сельдь под шубой</option>
+                                        <option value="Капуста квашенная,05.png">Капуста квашенная</option>
+                                        <option value="Оливье,06.png">Оливье</option>
+                                    </select>
+                                    <div class="order-item__img order-salats">
+                                        <img class="animate__animated order-img" src="img/null.png" alt="">
+                                    </div>
+                                </div>
+                                <!-- <button type="submit" name="order_submit">Order</button> -->
+                            </div>
+                        </form>
+                        <a href="#popup_change" class="form-order__btn btn popup-link">
+                            ПОДТВЕРИТЬ ЗАКАЗ
+                        </a>
+                    </div>
+                <?php } ?>
+                <?php if ($companyTarif == 'Комфорт (от 350р)') { ?>
+                    <div class="worker-profile__body worker-body">
+                        <div class="worker-body__timer">
+                            Заказы на завтра принимаются до 20:00
+                            <!-- <span id="span"> </span> -->
+                        </div>
+                        <div class="worker-body__title">
+                            Выберите меню на <span id="tomorrow"> </span>
+                        </div>
+                        <form class="worker-body__form form-order">
+                            <div class="form-order__items">
+                                <div class="form-order__item order-item">
+                                    <input hidden type="text" name="worker_name" value="<?= $worker['worker_name'] ?>">
+                                    <input hidden type="text" name="worker_company" value="<?= $worker['worker_company'] ?>">
+                                    <select name="item1" class="order-item__select select-soups order-item__select-hidden">
+                                        <option hidden value="">Выберите</option>
+                                        <option value="Гороховый,01.jpg">Гороховый</option>
+                                        <option value="Лагман,02.png">Лагман</option>
+                                        <option value="Куриный с лапшой,03.png">Куриный с лапшой</option>
+                                        <option value="Солянка,04.png">Солянка</option>
+                                        <option value="Харчо из баранины,harcho.png">Харчо из баранины</option>
+                                        <option value="Шурпа из говядины,shurpa.png">Шурпа из говядины</option>
+                                        <option value="Суп-пюре тыквенный,souptykvenniy.png">Суп-пюре тыквенный</option>
+                                    </select>
+                                    <div class="order-item__img animate__animated order-soups">
+                                        <img class="animate__animated order-img" src="img/null.png" alt="">
+                                    </div>
+                                </div>
+                                <div class="form-order__item order-item">
+                                    <select id="" class="order-item__select select-salats order-item__select-hidden">
+                                        <option hidden value="">Выберите</option>
+                                        <option value='Морковь "по-корейски",01.png'>Морковь "по-корейски"</option>
+                                        <option value="Греческий,02.png">Греческий</option>
+                                        <option value="Куриный с капустой,03.png">Куриный с капустой</option>
+                                        <option value="Сельдь под шубой,04.png">Сельдь под шубой</option>
+                                        <option value="Капуста квашенная,05.png">Капуста квашенная</option>
+                                        <option value="Оливье,06.png">Оливье</option>
+                                    </select>
+                                    <div class="order-item__img order-salats">
+                                        <img class="animate__animated order-img" src="img/null.png" alt="">
+                                    </div>
+                                </div>
+                                <div class="form-order__item order-item">
+                                    <select name="item3" id="" class="order-item__select select-garnir order-item__select-hidden">
+                                        <option hidden value="">Выберите</option>
+                                        <option value="Гречка,01.png">Гречка</option>
+                                        <option value="Рис отварной,02.png">Рис отварной</option>
+                                        <option value="Макароны отварные,03.png">Макароны отварные</option>
+                                        <option value="Белая фасоль с томатами,04.png">Белая фасоль с томатами</option>
+                                        <option value="Капуста цветная,05.png">Капуста цветная</option>
+                                        <option value="Пюре картофельное,06.png">Пюре картофельное</option>
+                                    </select>
+                                    <div class="order-item__img order-garnir">
+                                        <img class="animate__animated order-img" src="img/null.png" alt="">
+                                    </div>
+                                </div>
+                                <!-- <button type="submit" name="order_submit">Order</button> -->
+                            </div>
+                        </form>
+                        <a href="#popup_change" class="form-order__btn btn popup-link">
+                            ПОДТВЕРИТЬ ЗАКАЗ
+                        </a>
+                    </div>
+                <?php } ?>
+
+                <div>
+
+
+
                 </div>
                 <form action="company-profile.php" method="POST">
                     <button type="submit" name="logout_submit" class="worker-profile__out">
@@ -291,26 +390,30 @@ $companyImg = $fetchCompany->fetch(PDO::FETCH_ASSOC);
         let selectSalats = document.querySelector('.select-salats');
         let selectSalatsImg = document.querySelector('.order-salats img');
 
-        selectSalats.addEventListener('change', function() {
-            selectSalatsImg.src = 'img/menufordelivery/salats-4/' + this.value.split(',')[1];
-            selectSalats.classList.remove('order-item__select-hidden');
-            selectSalatsImg.classList.add('animate__backInUp');
-            setTimeout(() => {
-                selectSalatsImg.classList.remove('animate__backInUp');
-            }, 1000);
-        });
+        if (selectSalats) {
+            selectSalats.addEventListener('change', function() {
+                selectSalatsImg.src = 'img/menufordelivery/salats-4/' + this.value.split(',')[1];
+                selectSalats.classList.remove('order-item__select-hidden');
+                selectSalatsImg.classList.add('animate__backInUp');
+                setTimeout(() => {
+                    selectSalatsImg.classList.remove('animate__backInUp');
+                }, 1000);
+            });
+        }
 
         let selectGarnir = document.querySelector('.select-garnir');
         let selectGarnirImg = document.querySelector('.order-garnir img');
 
-        selectGarnir.addEventListener('change', function() {
-            selectGarnirImg.src = 'img/menufordelivery/garniry-4/' + this.value.split(',')[1];
-            selectGarnir.classList.remove('order-item__select-hidden');
-            selectGarnirImg.classList.add('animate__backInRight');
-            setTimeout(() => {
-                selectGarnirImg.classList.remove('animate__backInRight');
-            }, 1000);
-        });
+        if (selectGarnir) {
+            selectGarnir.addEventListener('change', function() {
+                selectGarnirImg.src = 'img/menufordelivery/garniry-4/' + this.value.split(',')[1];
+                selectGarnir.classList.remove('order-item__select-hidden');
+                selectGarnirImg.classList.add('animate__backInRight');
+                setTimeout(() => {
+                    selectGarnirImg.classList.remove('animate__backInRight');
+                }, 1000);
+            });
+        }
     </script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
@@ -330,8 +433,14 @@ $companyImg = $fetchCompany->fetch(PDO::FETCH_ASSOC);
 
             // console.log(selectSoups.value);
             formItem1.value = selectSoups.value.split(',')[0];
-            formItem2.value = selectSalats.value.split(',')[0];
-            formItem3.value = selectGarnir.value.split(',')[0];
+            if (selectSalats) {
+                formItem2.value = selectSalats.value.split(',')[0];
+            }
+            if (selectGarnir) {
+                formItem3.value = selectGarnir.value.split(',')[0];
+            }
+
+
             // console.log(selectSoups.getAttribute('data-name'))
 
         });
@@ -381,24 +490,12 @@ $companyImg = $fetchCompany->fetch(PDO::FETCH_ASSOC);
             let hoursReal = String(date.getHours()).padStart(2, '0');
             let minutesReal = String(date.getMinutes()).padStart(2, '0');
             let secondsReal = String(date.getSeconds()).padStart(2, '0');
-            // console.log(hoursReal);
-            //2 weeks in milliseconds
-            // if ((date - startDate) / oneDay < 60) return;
-
-            datefororder.value = `${date.getDate() + 1}.${date.getMonth() + 1}.${date.getFullYear()}`;
-            tomorrow.innerText = `${date.getDate() + 1}.${date.getMonth() + 1}.${date.getFullYear()}`;
-            // console.log(`${(Math.floor((date - startDate) / minutes) % 60)}:${(Math.floor((date - startDate) / seconds) % 60)}`);
-            // if (hoursReal < 21) {
-            //     timer.innerText = `принимаются ещё ${(Math.floor((date - startDate) / hours) % 12)}:${(Math.floor((date - startDate) / minutes) % 60)}:${(Math.floor((date - startDate) / seconds) % 60)}`;
-            // } else {
-            //     timer.innerText = 'уже не принимаются';
-            // }
 
 
-            // timer.replace('-', '');
-            // switch (Math.floor(((date - startDate) / oneDay)) % 4) {
-            // }
-        }, 1000); //y is any interval in milliseconds, shorter will be more precise but will use more memory
+            datefororder.value = `${('0' + (date.getDate() + 1)).slice(-2)}.${(('0' + date.getMonth() + 1)).slice(-2)}.${date.getFullYear()}`;
+            tomorrow.innerText = `${('0' + (date.getDate() + 1)).slice(-2)}.${(('0' + date.getMonth() + 1)).slice(-2)}.${date.getFullYear()}`;
+
+        }, 1000);
     </script>
     <!-- Yandex.Metrika counter -->
     <script type="text/javascript">

@@ -647,6 +647,13 @@
 }
 
 
+.adminlogout {    
+    width: 100%;
+    text-align: center;
+    display: block;
+    margin: 0 auto 15px;
+
+}
 
 
 /* TEST */
@@ -1239,4 +1246,15 @@ body.lock {
         margin-top: 25px;
     }
 }
-
+.form-orders__admin {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+@media print {
+    .order-items {
+        margin-bottom: 40px;
+        background-color: #61678f;
+        font-size: 30px;
+    }
+}

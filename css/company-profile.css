@@ -111,7 +111,7 @@
 .add-worker__btn {
     width: 100%;
     padding: 10px;
-    font-family: 'sf-regular' sans-serif;
+    font-family: 'sf-regular', sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 24px;
@@ -119,6 +119,10 @@
     text-align: center;
     letter-spacing: -0.005em;
     color: #CFCFCF;
+}
+@media (max-width: 510px) {
+    .add-worker__btn {
+        font-size: 20px;    }
 }
 
 /* WORKERS */

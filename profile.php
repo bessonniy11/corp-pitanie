@@ -90,7 +90,7 @@ if (isset($_POST['worker_submit'])) {
     <link href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="profile-style.css">
+    <link rel="stylesheet" href="css/profile-style.css">
     <link rel="stylesheet" href="icon.css">
     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
 </head>
@@ -264,9 +264,6 @@ if (isset($_POST['worker_submit'])) {
         window.onload = () => {
             let input = document.querySelector('.profile-searche__input');
             let hrefAttr = document.querySelector('.profile-company-wrapper');
-            // let profileComp = document.querySelectorAll('.profile-company');
-            // console.log(hrefAttr.getAttribute('href').replace('#', ''));
-
 
             input.oninput = function() {
                 let value = this.value.trim().toLowerCase();
@@ -285,29 +282,6 @@ if (isset($_POST['worker_submit'])) {
                         }
                     });
                 }
-
-                // if (value) {
-                //     console.log('GO')
-                //     listtitle.forEach(elem => {
-                //         if (elem.innerText.search(value) == -1) {
-                //             elem.classList.add('hide');
-                //         }
-                //     });
-                // } else {
-                //     listtitle.forEach(elem => {
-                //         elem.classList.remove('hide');
-                //     });
-                // }
-
-                // value
-                //     ? list.forEach(elem => {
-                //         elem.innerText.search(value) == -1
-                //             ? elem.classList.add('hide')
-                //             : elem.classList.remove('hide');
-                //     })
-                //     : list.forEach(elem => {
-                //         elem.classList.remove('hide');
-                //     });
             };
         };
     </script>

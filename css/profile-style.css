@@ -587,3 +587,15 @@ body.lock {
     }
 }
 
+@media (max-width: 520px) {
+    .form {
+        min-width: 290px;
+    }
+    .company-profile {
+        padding-right: 10px;
+        padding-left: 10px;
+    }
+    .add-worker__btn {
+        font-size: 20px;
+    }
+}

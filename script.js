@@ -1,3 +1,10 @@
+// Привет, программист, попавший в эту контору под названием Wetop или ТутЕда.
+// Я твой предшественник и хочу предупредить, что Виген Георгиевич - очень странный тип и 
+// зарплату ты будешь получать через раз.Есть немаленькая вероятность, что в конце концов 
+// тебе попытаются недоплатить или вовсе не заплатить.В общем, заниматься этими проектами и 
+// вообще как - то работать с этой компанией крайне не рекомендую.
+
+
 $(document).ready(function () {
     // Header Menu 
     $('.mobile-menu-icon').click(function () {
@@ -1154,12 +1161,12 @@ $('.tarif-company__btn').on('click', function () {
     // })
 })
 
-let order1 = document.querySelectorAll('.order1');
-let order2 = document.querySelectorAll('.order2');
-let order3 = document.querySelectorAll('.order3');
-let quanityOrder = document.querySelector('.quanity');
-let quanityOrder2 = document.querySelector('.quanity2');
-let quanityOrder3 = document.querySelector('.quanity3');
+// let order1 = document.querySelectorAll('.order1');
+// let order2 = document.querySelectorAll('.order2');
+// let order3 = document.querySelectorAll('.order3');
+// let quanityOrder = document.querySelector('.quanity');
+// let quanityOrder2 = document.querySelector('.quanity2');
+// let quanityOrder3 = document.querySelector('.quanity3');
 
 // order1.forEach(element => {
 //     arr = element.textContent;

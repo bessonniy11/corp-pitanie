@@ -1,6 +1,18 @@
 <?php
 require_once __DIR__ . "/database/database.php";
 
+session_start();
+if ($_SESSION['admin'] != "admin") {
+    header("Location: adminlogin.php");
+    exit;
+}
+if ($_GET['do'] == 'logout') {
+    unset($_SESSION['admin']);
+    header("Location: adminlogin.php");
+    session_destroy();
+}
+
+
 $item1 = $_POST['item1'];
 $item2 = $_POST['item2'];
 $item3 = $_POST['item3'];
@@ -14,12 +26,12 @@ $errors = [];
 if (empty($item1)) {
     $errors['item1'] = true;
 }
-if (empty($item2)) {
-    $errors['item2'] = true;
-}
-if (empty($item3)) {
-    $errors['item3'] = true;
-}
+// if (empty($item2)) {
+//     $errors['item2'] = true;
+// }
+// if (empty($item3)) {
+//     $errors['item3'] = true;
+// }
 
 
 if (empty($errors)) {
@@ -135,15 +147,12 @@ $order_dishes3 = [];
     <link href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <link rel="icon" href="./img/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="profile-style.css">
+    <link rel="stylesheet" href="css/profile-style.css">
     <link rel="stylesheet" href="css/admin-style.css">
     <link rel="stylesheet" href="icon.css">
     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
 </head>
 
-<style>
-
-</style>
 
 <body>
     <div class="wrapper">
@@ -153,6 +162,7 @@ $order_dishes3 = [];
             </div>
             <div class="admin__body body-admin _tabs">
                 <div class="body-admin__sibebar admin-sibebar">
+                    <a href="admin.php?do=logout" class="adminlogout">Выйти</a>
                     <div class="admin-sibebar__avatar">
                         <img src="img/corp_logo.png" alt="back">
                     </div>
@@ -167,19 +177,16 @@ $order_dishes3 = [];
                     <div class="orders-header">
                         <button class="refresh-btn">Обновить</button>
                         <div сlass="result__all-wrap">
-                            <button class="print__button" onclick="PrintElem('#result__all')">Печать</button>
+                            <button class="print__button" onclick="PrintElem('#result')">Печать</button>
                         </div>
                         <?php
                         $company = $_POST['filter'];
                         $dateorders = $_POST['ordersfordate'];
                         ?>
-                        <div class="orders-header__calendar">
-                            <form action="admin.php" method="POST">
-                                <input type="date" name="ordersfordate" id="" value="">
-                                <button type="submit">Выбрать</button>
-                            </form>
-                        </div>
-                        <form action="admin.php" method="POST">
+                        <form action="admin.php" method="POST" class="form-orders__admin">
+                            <div class="orders-header__calendar">
+                                <input class="inputdate" id="inputdate" type="date" name="ordersfordate" value="<?php echo $dateorders ?>">
+                            </div>
                             <select type="text" name="filter" id="filter" class="orders-header__select select-orders">
                                 <option value="*">Все</option>
                                 <?php
@@ -189,7 +196,7 @@ $order_dishes3 = [];
                                     if ($row['name'] == $company) $selected = " selected";
                                     else $selected = "";
                                 ?>
-                                    <option value="<?php echo $row['name'] ?>" <? echo $selected; ?>><?php echo $row['name'] ?></option>
+                                    <option value="<?php echo $row['name'] ?>" <? echo $selected; ?>><?php echo $row['name']; ?></option>
                                 <?php } ?>
                             </select>
                             <button class="select-orders__btn" type="submit">Выбрать</button>
@@ -197,8 +204,11 @@ $order_dishes3 = [];
                     </div>
                     <div class="orders__wrapper" id="result">
                         <?php
-                        if ($company == "*") $sql = "SELECT * FROM `orders`";
-                        else $sql = "SELECT * FROM `orders` WHERE `order_company` = '$company'";
+                        $dateorders1 = date_format($date = date_create($dateorders), 'd.m.Y');
+
+                        if ($company == "*") $sql = "SELECT * FROM `orders` WHERE `order_for_date` = '$dateorders1'";
+                        else $sql = "SELECT * FROM `orders` WHERE `order_company` = '$company' AND `order_for_date` = '$dateorders1' ORDER BY `order_id` DESC";
+
                         $rows = $dbh->query($sql);
                         foreach ($rows as $row) {
                         ?>
@@ -220,6 +230,7 @@ $order_dishes3 = [];
                                 </div>
                                 <div class="order-items__time">Время заказа: <?php echo $row['order_date'] ?></div>
                             </div>
+                            <br>
                         <?php
                             $order_dishes1[] = $row['order_dish1'];
                             $order_dishes2[] = $row['order_dish2'];
@@ -236,23 +247,27 @@ $order_dishes3 = [];
                                 <div class="result__all-title">Супы:</div>
                                 <?php
                                 $count_dishes1 = array_count_values($order_dishes1);
-                                foreach ($count_dishes1 as $key => $val) echo '<div class="result__all-item">' . $key . ' - ' . $val . ' шт.,</div>';
+                                foreach ($count_dishes1 as $key => $val) if (!empty($key)) echo '<div class="result__all-item">' . $key . ' - ' . $val . ' шт.,</div>';
                                 ?>
                             </div><br>
                             <div class="result__all-view">
                                 <div class="result__all-title">Салаты:</div>
                                 <?php
                                 $count_dishes2 = array_count_values($order_dishes2);
-                                foreach ($count_dishes2 as $key => $val) echo '<div class="result__all-item">' . $key . ' - ' . $val . ' шт.,</div>';
+                                foreach ($count_dishes2 as $key => $val) if (!empty($key)) echo '<div class="result__all-item">' . $key . ' - ' . $val . ' шт.,</div>';
                                 ?>
                             </div><br>
+                            <?php //if ($order_dishes3) {
+                            ?>
                             <div class="result__all-view">
-                                <div class="result__all-title">Второе:</div>
+                                <div class="result__all-title">Гарнир:</div>
                                 <?php
                                 $count_dishes3 = array_count_values($order_dishes3);
-                                foreach ($count_dishes3 as $key => $val) echo '<div class="result__all-item">' . $key . ' - ' . $val . ' шт.,</div>';
+                                foreach ($count_dishes3 as $key => $val) if (!empty($key)) echo '<div class="result__all-item">' . $key . ' - ' . $val . ' шт.,</div>';
                                 ?>
                             </div><br>
+                            <?php // }
+                            ?>
 
                         </div>
                         <? //= $content 
@@ -332,9 +347,9 @@ $order_dishes3 = [];
                             <input class="add-company__img" id="change_img-input" type="file" name="company_img" alt="">
                         </div>
                         <select name="company_tarif" size=1 class="add-company__tarif">
-                            <option value="1">Тариф №1</option>
-                            <option value="2">Тариф №2</option>
-                            <option value="3">Тариф №3</option>
+                            <option value="Мини (от 200р)">Мини (от 200р)</option>
+                            <option value="Стандарт (от 250р)">Стандарт (от 250р)</option>
+                            <option value="Комфорт (от 350р)">Комфорт (от 350р)</option>
                         </select>
                         <button type="submit" name="reg_company_submit" class="add-company__btn">
                             Добавить
@@ -396,31 +411,50 @@ $order_dishes3 = [];
                 </form>
             </div>
         <?php } ?>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
         <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
         <script src="js/izotope.min.js"></script>
         <script src="script.js"></script>
         <script>
-            $('#filter').change(function() {
-                $.ajax({
-                    method: "POST",
-                    url: "admin.php",
-                    data: {
-                        filter: $("#filter").val()
-                    },
-                    success: function(response) {
-                        console.log($("#filter").val())
-                    }
-                });
-            });
+            // $(".inputdate").on("change", function() {
+            //     this.setAttribute(
+            //         "data-date",
+            //         moment(this.value, "YYYY-MM-DD")
+            //         .format(this.getAttribute("data-date-format"))
+            //     )
+            // }).trigger("change")
+
+            // $('#inputdatebtn').click(function() {
+            //     $.ajax({
+            //         method: "POST",
+            //         url: "admin.php",
+            //         data: {
+            //             ordersfordate: $("#inputdate").val()
+            //         },
+            //         success: function(response) {
+            //             console.log($("#inputdate").val())
+            //         }
+            //     });
+            // });
+
+            // $('#filter').change(function() {
+            //     $.ajax({
+            //         method: "POST",
+            //         url: "admin.php",
+            //         data: {
+            //             filter: $("#filter").val()
+            //         },
+            //         success: function(response) {
+            //             console.log($("#filter").val())
+            //         }
+            //     });
+            // });
 
             let refreshBtn = document.querySelector('.refresh-btn');
             refreshBtn.addEventListener('click', function() {
                 window.location.reload()
             })
-
-
-
 
             // search
             window.onload = () => {
@@ -479,14 +513,23 @@ $order_dishes3 = [];
                 });
             }
         </script>
+        <script>
+            // const inputdate = document.getElementById('inputdate');
+            // window.setInterval(() => {
+            //     let date = new Date();
+
+            //     inputdate.value = `${date.getFullYear()}-${(('0' + date.getMonth() + 1)).slice(-2)}-${('0' + (date.getDate() + 1)).slice(-2)}`;
+
+            // }, 1000);
+        </script>
         <script type="text/javascript">
             function PrintElem(elem) {
                 Popup($(elem).html());
             }
 
             function Popup(data) {
-                var mywindow = window.open('', 'result__all', 'height=400,width=600');
-                mywindow.document.write('<html><head><title>Заказы на завтра</title>');
+                var mywindow = window.open('', 'result', 'height=400,width=600');
+                mywindow.document.write('<html><head><title style="text-align:start">Заказы</title>');
                 mywindow.document.write('</head><body >');
                 mywindow.document.write(data);
                 mywindow.document.write('</body></html>');
@@ -499,21 +542,7 @@ $order_dishes3 = [];
         </script>
         <!-- Yandex.Metrika counter -->
         <script type="text/javascript">
-            (function(m, e, t, r, i, k, a) {
-                m[i] = m[i] || function() {
-                    (m[i].a = m[i].a || []).push(arguments)
-                };
-                m[i].l = 1 * new Date();
-                k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a)
-            })
-            (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
 
-            ym(69306538, "init", {
-                clickmap: true,
-                trackLinks: true,
-                accurateTrackBounce: true,
-                webvisor: true
-            });
         </script>
         <noscript>
             <div><img src="https://mc.yandex.ru/watch/69306538" style="position:absolute; left:-9999px;" alt="" /></div>
