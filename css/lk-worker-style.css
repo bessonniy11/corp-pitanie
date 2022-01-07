@@ -159,6 +159,11 @@
     padding: 30px 30px;
     transition: all 0.8s ease 0s;
 }
+@media (max-width: 420px) {
+    .popup__body .change-body-important {
+        padding: 70px 30px 30px;
+    } 
+}
 
 /* HEADER */
 

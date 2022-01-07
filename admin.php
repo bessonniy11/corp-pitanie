@@ -161,6 +161,18 @@ $order_dishes3 = [];
                 Панель администратора
             </div>
             <div class="admin__body body-admin _tabs">
+                <div class="menu__icon icon-menu_admin">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <!-- <div class="tabs-block tabs-block__mob">
+                    <div class="tabs-block__item _tabs-item _active">Заказы</div>
+                    <div class="tabs-block__item _tabs-item">Компании</div>
+                    <div class="tabs-block__item _tabs-item">Меню</div>
+                    <div class="tabs-block__item _tabs-item">Статистика</div>
+                    <a href="admin.php?do=logout" class="adminlogout">Выйти</a>
+                </div> -->
                 <div class="body-admin__sibebar admin-sibebar">
                     <a href="admin.php?do=logout" class="adminlogout">Выйти</a>
                     <div class="admin-sibebar__avatar">
@@ -514,13 +526,22 @@ $order_dishes3 = [];
             }
         </script>
         <script>
-            // const inputdate = document.getElementById('inputdate');
-            // window.setInterval(() => {
-            //     let date = new Date();
+            let iconMenuAdmin = document.querySelector(".icon-menu_admin");
+            if (iconMenuAdmin != null) {
 
-            //     inputdate.value = `${date.getFullYear()}-${(('0' + date.getMonth() + 1)).slice(-2)}-${('0' + (date.getDate() + 1)).slice(-2)}`;
+                let menuBodyAdmin = document.querySelector(".body-admin__sibebar");
+                iconMenuAdmin.addEventListener("click", function(e) {
+                    iconMenuAdmin.classList.toggle("_active");
+                    menuBodyAdmin.classList.toggle("_active");
+                });
+            };
 
-            // }, 1000);
+            function menu_close() {
+                let iconMenuAdmin = document.querySelector(".icon-menu_admin");
+                let menuBodyAdmin = document.querySelector(".body-admin__sibebar");
+                iconMenuAdmin.classList.remove("_active");
+                menuBodyAdmin.classList.remove("_active");
+            }
         </script>
         <script type="text/javascript">
             function PrintElem(elem) {
